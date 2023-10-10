@@ -32,7 +32,7 @@ export const loginUserServices = (dataUser) =>
     try {
       const { email, password } = dataUser;
       const user = await db.Users.findOne({
-        where: { email },
+        where: { email: email },
       });
       const checkPassword = user && bcrypt.compareSync(password, user.password); // kiểm tra true false
       const token = checkPassword
@@ -49,8 +49,8 @@ export const loginUserServices = (dataUser) =>
         : null;
 
       resolve({
-        success: true,
-        accessToken: token, // trả token
+        success: token !== null ? true : false,
+        accessToken: token !== null ? token : "Nhập sai mật khẩu", // khi login no trả 1 token
       });
     } catch (error) {
       reject(error);
