@@ -1,36 +1,36 @@
 import * as handleError from "../middlewares/handleError";
 import * as services from "../services";
 
-export const createUser = async (req, res) => {
+export const createProducts = async (req, res) => {
   try {
-    const response = await services.createUserServices(req.body);
+    const response = await services.createProductsServices(req.body);
     return res.status(200).json(response);
   } catch (e) {
     return handleError.internalServerError(res);
   }
 };
-export const getAllUsers = async (req, res) => {
+export const getAllProducts = async (req, res) => {
   try {
-    const response = await services.getAllUserServices();
+    const response = await services.getAllProductsServices();
     return res.status(200).json(response);
   } catch (error) {
     return handleError.internalServerError(res);
   }
 };
-export const getOneUser = async (req, res) => {
-  const { id } = req.user;
+export const getOneProducts = async (req, res) => {
+  const { id } = req.params;
   try {
-    const response = await services.getOneUserServices({ id });
+    const response = await services.getOneProductsServices({ id });
     return res.status(200).json(response);
   } catch (error) {
     return handleError.internalServerError(res);
   }
 };
-export const updateUser = async (req, res) => {
+export const updateProducts = async (req, res) => {
   const { id } = req.params;
   const avatar = req.file.path;
   try {
-    const response = await services.updateUserServices(id, {
+    const response = await services.updateProductsServices(id, {
       ...req.body,
       avatar,
     });
@@ -39,10 +39,10 @@ export const updateUser = async (req, res) => {
     return handleError.internalServerError(res);
   }
 };
-export const deleteUser = async (req, res) => {
+export const deleteProducts = async (req, res) => {
   const { id } = req.params;
   try {
-    const response = await services.deleteUserServices({ id });
+    const response = await services.deleteProductsServices({ id });
     return res.status(200).json(response);
   } catch (error) {
     return handleError.internalServerError(res);

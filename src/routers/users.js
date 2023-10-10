@@ -1,13 +1,19 @@
 const express = require("express");
 const userRouter = express.Router();
-const upload = require("../middlewares/upload");
-
 const controllers = require("../controllers");
+const uploadCloud = require("../middlewares/upload");
+const checkAuthentication = require("../middlewares/checkAuth");
 
 userRouter.get("/", controllers.getAllUsers);
-userRouter.get("/:id", controllers.getOneUser);
-userRouter.post("/create", controllers.createUser);
-userRouter.put("/:id", upload.single("avatar"), controllers.updateUser);
-userRouter.delete("/:id", controllers.deleteUser);
+userRouter.get("/me", [checkAuthentication], controllers.getOneUser);
+
+userRouter.put(
+  "/update",
+  [checkAuthentication],
+  uploadCloud.single("avatar"),
+  controllers.updateUser
+);
+
+userRouter.delete("/delete", [checkAuthentication], controllers.deleteUser);
 
 module.exports = userRouter;

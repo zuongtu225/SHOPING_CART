@@ -1,43 +1,47 @@
 import db from "../models";
-export const createRoleServices = ({ roleRequest }) =>
+
+export const createCategoryServices = (data) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Roles.findOrCreate({
-        where: { role: roleRequest },
-        defaults: { role: roleRequest },
+      const response = await db.Categories.findOrCreate({
+        where: { title: data.title },
+        defaults: { title: data.title },
       });
       resolve({
         success: response[1] === true ? true : false,
         message:
-          response[1] === true ? "Tạo Role thành công" : "Role is available",
+          response[1] === true
+            ? "Tạo Product thành công"
+            : "Product đã tồn tại",
       });
-    } catch (e) {
-      reject(e);
+    } catch (error) {
+      console.log(error, ">>");
+      reject(error);
     }
   });
 
-export const getAllRoleServices = () =>
+export const getAllCategoriesServices = () =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Roles.findAll({
+      const response = await db.Categories.findAll({
         attributes: {
-          exclude: ["createdAt", "updatedAt"], // mún ẩn
+          exclude: ["createdAt", "updatedAt"],
         },
       });
-      const roles = response.map((role) => role.toJSON());
+      const Category = response.map((item) => item.toJSON());
       resolve({
         success: true,
-        data: roles,
+        data: Category,
       });
     } catch (error) {
       reject(error);
     }
   });
 
-export const getOneRoleServices = ({ id }) =>
+export const getOneCategoryServices = ({ id }) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Roles.findOne({
+      const response = await db.Categories.findOne({
         where: { id },
         attributes: {
           exclude: ["createdAt", "updatedAt"],
@@ -52,25 +56,25 @@ export const getOneRoleServices = ({ id }) =>
     }
   });
 
-export const updateRoleServices = ({ id, body }) =>
+export const updateCategoryServices = (id, title) =>
   new Promise(async (resolve, reject) => {
     try {
-      await db.Roles.update(body, {
+      const response = await db.Categories.update(title, {
         where: { id },
       });
+      console.log(response, "<<");
       resolve({
         success: true,
-        message: `Role cập nhật thành công`,
+        message: `Product cập nhật thành công`,
       });
     } catch (error) {
       reject(error);
     }
   });
-
-export const deleteRoleServices = ({ id }) =>
+export const deleteCategoryServices = ({ id }) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Roles.destroy({
+      const response = await db.Categories.destroy({
         where: { id },
       });
       resolve({

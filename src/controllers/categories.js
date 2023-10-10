@@ -1,48 +1,46 @@
 import * as handleError from "../middlewares/handleError";
 import * as services from "../services";
 
-export const createUser = async (req, res) => {
+export const createCategory = async (req, res) => {
   try {
-    const response = await services.createUserServices(req.body);
-    return res.status(200).json(response);
-  } catch (e) {
-    return handleError.internalServerError(res);
-  }
-};
-export const getAllUsers = async (req, res) => {
-  try {
-    const response = await services.getAllUserServices();
+    const response = await services.createCategoryServices(req.body);
     return res.status(200).json(response);
   } catch (error) {
     return handleError.internalServerError(res);
   }
 };
-export const getOneUser = async (req, res) => {
-  const { id } = req.user;
+
+export const getAllCategories = async (req, res) => {
   try {
-    const response = await services.getOneUserServices({ id });
+    const response = await services.getAllCategoriesServices();
     return res.status(200).json(response);
   } catch (error) {
     return handleError.internalServerError(res);
   }
 };
-export const updateUser = async (req, res) => {
-  const { id } = req.params;
-  const avatar = req.file.path;
-  try {
-    const response = await services.updateUserServices(id, {
-      ...req.body,
-      avatar,
-    });
-    return res.status(200).json(response);
-  } catch (error) {
-    return handleError.internalServerError(res);
-  }
-};
-export const deleteUser = async (req, res) => {
+export const getOneCategory = async (req, res) => {
   const { id } = req.params;
   try {
-    const response = await services.deleteUserServices({ id });
+    const response = await services.getOneCategoryServices({ id });
+    return res.status(200).json(response);
+  } catch (error) {
+    return handleError.internalServerError(res);
+  }
+};
+export const updateCategory = async (req, res) => {
+  const { id } = req.params;
+  try {
+    // // giá trị so sánh thì ko cần gôm lại { } object
+    const response = await services.updateCategoryServices(id, req.body);
+    return res.status(200).json(response);
+  } catch (error) {
+    return handleError.internalServerError(res);
+  }
+};
+export const deleteCategory = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await services.deleteCategoryServices({ id });
     return res.status(200).json(response);
   } catch (error) {
     return handleError.internalServerError(res);

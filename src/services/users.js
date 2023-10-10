@@ -1,29 +1,4 @@
 import db from "../models"; // db tự động biết ở model
-const bcrypt = require("bcrypt");
-export const createUserServices = ({ firstName, lastName, password, email }) =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const newPassword = await bcrypt.hash(password, 12);
-      const response = await db.Users.findOrCreate({
-        where: { email },
-        defaults: {
-          firstName,
-          lastName,
-          password: newPassword,
-          email,
-        },
-      });
-      resolve({
-        success: response[1] === true ? true : false,
-        message:
-          response[1] === true
-            ? "Tạo người mới thành công"
-            : "Người dùng đã tồn tại",
-      });
-    } catch (error) {
-      reject(error);
-    }
-  });
 
 export const getAllUserServices = () =>
   new Promise(async (resolve, reject) => {
@@ -79,7 +54,7 @@ export const updateUserServices = (id, body) =>
       });
       resolve({
         success: true,
-        message: `Role updated successfully`,
+        message: `Cập nhật thành công`,
       });
     } catch (error) {
       reject(error);
