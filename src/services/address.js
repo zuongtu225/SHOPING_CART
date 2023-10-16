@@ -2,25 +2,12 @@ import db from "../models";
 export const createAddressServices = (body) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Addresses.findOrCreate({
-        where: {
-          address: body.address,
-        },
-        defaults: {
-          address: body.address,
-          userID: body.id,
-          phoneNumber: body.phoneNumber,
-        },
-      });
       resolve({
-        success: response[1] === true ? true : false,
-        message:
-          response[1] === true
-            ? "Tạo Address thành công"
-            : "Address đã tồn tại",
+        success: true,
+        message: "Thêm Address thành công",
       });
     } catch (error) {
-      console.log(error, "44");
+      console.log(error);
       reject(error);
     }
   });
@@ -30,7 +17,7 @@ export const getAllAddressServices = () =>
     try {
       const response = await db.Addresses.findAll({
         attributes: {
-          exclude: ["createdAt", "updatedAt"], // bỏ những cái không cần thiết
+          exclude: ["createdAt", "updatedAt"],
         },
       });
       const addresses = response.map((address) => address.dataValues);
@@ -43,36 +30,34 @@ export const getAllAddressServices = () =>
     }
   });
 
-export const getOneAddressServices = ({ id }) =>
+export const getAddressByUserServices = ({ id }) =>
   new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Addresses.findOne({
-        where: { userID: id },
+      const response = await db.Addresses.findAll({
+        where: { userId: id },
         attributes: {
           exclude: ["createdAt", "updatedAt"],
         },
       });
+      const data = response.map((item) => item.dataValues);
       resolve({
         success: true,
-        data: response.dataValues,
+        data: data,
       });
     } catch (error) {
       reject(error);
     }
   });
 
-export const updateAddressServices = ({ id, body }) =>
+export const updateAddressServices = (id, data) =>
   new Promise(async (resolve, reject) => {
-    const ProductCredentials = {
-      ...(body.Product && { Product: body.Product }),
-    };
     try {
-      await db.Product.update(ProductCredentials, {
-        where: { id },
+      await db.Addresses.update(data, {
+        where: { userId: id },
       });
       resolve({
         success: true,
-        message: `Product cập nhật thành công`,
+        message: `Cập nhật địa chỉ thành công`,
       });
     } catch (error) {
       reject(error);
@@ -83,7 +68,7 @@ export const deleteAddressServices = ({ id }) =>
   new Promise(async (resolve, reject) => {
     try {
       const response = await db.Addresses.destroy({
-        where: { id },
+        where: { userId: id },
       });
       resolve({
         success: response > 0 ? true : false,
